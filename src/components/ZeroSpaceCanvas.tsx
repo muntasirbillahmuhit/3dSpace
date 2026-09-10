@@ -150,6 +150,13 @@ export const ZeroSpaceCanvas: React.FC = () => {
     renderer.domElement.addEventListener('pointerdown', onPointerDown);
     renderer.domElement.addEventListener('pointerup', onPointerUp);
 
+    const handleResetView = () => {
+      targetCamera.set(15, 10, 20);
+      targetControls.set(0, 0, 0);
+      isGliding = true;
+    };
+    window.addEventListener('reset-space-view', handleResetView);
+
     // 8. Resize Handler
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
@@ -191,6 +198,7 @@ export const ZeroSpaceCanvas: React.FC = () => {
       resizeObserver.disconnect();
       renderer.domElement.removeEventListener('pointerdown', onPointerDown);
       renderer.domElement.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('reset-space-view', handleResetView);
       controls.dispose();
       renderer.dispose();
       

@@ -86,9 +86,10 @@ export function createSunTexture(): THREE.CanvasTexture {
       const heat = n * 0.75 + granule * 0.25;
       const idx = (y * width + x) * 4;
 
-      imgData.data[idx] = Math.min(255, Math.floor(255 * (0.85 + heat * 0.15)));
-      imgData.data[idx + 1] = Math.min(255, Math.floor(180 + heat * 70));
-      imgData.data[idx + 2] = Math.min(255, Math.floor(40 + heat * 60));
+      const coreIntensity = Math.min(1.0, heat * 1.2);
+      imgData.data[idx] = 255;
+      imgData.data[idx + 1] = Math.min(255, Math.floor(205 + coreIntensity * 50));
+      imgData.data[idx + 2] = Math.min(255, Math.floor(95 + coreIntensity * 135));
       imgData.data[idx + 3] = 255;
     }
   }
@@ -506,6 +507,145 @@ export function createMoonTexture(): THREE.CanvasTexture {
       imgData.data[idx + 3] = 255;
     }
   }
+  ctx.putImageData(imgData, 0, 0);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
+}
+
+// 13. Pluto Texture (featuring Tombaugh Regio / Sputnik Planitia heart and tholin terrain)
+export function createPlutoTexture(): THREE.CanvasTexture {
+  const width = 512;
+  const height = 256;
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d')!;
+  const imgData = ctx.createImageData(width, height);
+  const noise = new SimpleNoise(8888);
+
+  for (let y = 0; y < height; y++) {
+    const v = y / height;
+    const lat = (v - 0.5) * Math.PI;
+
+    for (let x = 0; x < width; x++) {
+      const u = x / width;
+
+      // Base terrain noise (cratered highlands and rolling tholin ridges)
+      const baseNoise = noise.fbm(u * 14.0, v * 14.0, 5);
+      const fineNoise = noise.noise2D(u * 28.0, v * 28.0);
+      const mountainNoise = noise.fbm(u * 22.0, v * 22.0, 4);
+
+      // Cthulhu Macula (dark equatorial tholin band)
+      const eqDist = Math.abs(v - 0.56);
+      const cthulhuU = Math.max(0, 1 - Math.abs(u - 0.28) / 0.15);
+      const cthulhu = Math.max(0, 1 - eqDist / 0.12) * cthulhuU;
+
+      // Tombaugh Regio (The Heart):
+      // Left lobe: Sputnik Planitia (smooth, high-albedo nitrogen ice plain)
+      const spDist = Math.hypot((u - 0.52) * 1.5, (v - 0.56) * 1.0);
+      const sputnik = Math.max(0, 1 - spDist / 0.11);
+
+      // Right lobe of the heart
+      const erDist = Math.hypot((u - 0.61) * 1.4, (v - 0.53) * 1.1);
+      const eastHeart = Math.max(0, 1 - erDist / 0.10);
+
+      // Southern tip of the heart
+      const tipDist = Math.hypot((u - 0.56) * 1.8, (v - 0.65) * 1.0);
+      const heartTip = Math.max(0, 1 - tipDist / 0.08);
+
+      const heart = Math.min(1, sputnik * 1.3 + eastHeart * 0.95 + heartTip * 0.85);
+
+      // Polar frost caps
+      const polarCap = Math.max(0, Math.abs(lat) - 1.05) / 0.52;
+
+      // Color composition: Rich contrast between dark tholins and bright nitrogen ice
+      let r = 162 + baseNoise * 50 - cthulhu * 85 + fineNoise * 15;
+      let g = 115 + baseNoise * 35 - cthulhu * 75 + fineNoise * 10;
+      let b = 85 + baseNoise * 25 - cthulhu * 65 + fineNoise * 10;
+
+      // Water ice mountain ranges (Hillary & Norgay Montes)
+      if (mountainNoise > 0.58) {
+        const peak = (mountainNoise - 0.58) * 2.8;
+        r += peak * 45;
+        g += peak * 40;
+        b += peak * 40;
+      }
+
+      // Heart / Sputnik Planitia: brilliant creamy white / pale ivory nitrogen frost
+      if (heart > 0.01) {
+        const hFactor = Math.pow(heart, 0.75);
+        const cellNoise = noise.noise2D(u * 40.0, v * 40.0) * 0.08;
+        const iceR = 250 + cellNoise * 5;
+        const iceG = 240 + cellNoise * 5;
+        const iceB = 228 + cellNoise * 10;
+
+        r = r * (1 - hFactor) + iceR * hFactor;
+        g = g * (1 - hFactor) + iceG * hFactor;
+        b = b * (1 - hFactor) + iceB * hFactor;
+      }
+
+      // Polar methane caps
+      if (polarCap > 0) {
+        const frost = Math.min(1, polarCap * 0.85);
+        r = r * (1 - frost) + 215 * frost;
+        g = g * (1 - frost) + 205 * frost;
+        b = b * (1 - frost) + 195 * frost;
+      }
+
+      const idx = (y * width + x) * 4;
+      imgData.data[idx] = Math.min(255, Math.max(0, Math.floor(r)));
+      imgData.data[idx + 1] = Math.min(255, Math.max(0, Math.floor(g)));
+      imgData.data[idx + 2] = Math.min(255, Math.max(0, Math.floor(b)));
+      imgData.data[idx + 3] = 255;
+    }
+  }
+
+  ctx.putImageData(imgData, 0, 0);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
+}
+
+// 14. Charon Texture (Pluto's moon with reddish Mordor Macula north polar cap)
+export function createCharonTexture(): THREE.CanvasTexture {
+  const width = 256;
+  const height = 128;
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d')!;
+  const imgData = ctx.createImageData(width, height);
+  const noise = new SimpleNoise(7777);
+
+  for (let y = 0; y < height; y++) {
+    const v = y / height;
+    const isNorthPole = Math.max(0, 1 - v / 0.35); // Dark reddish Mordor Macula
+    for (let x = 0; x < width; x++) {
+      const u = x / width;
+      const n = noise.fbm(u * 12.0, v * 12.0, 4);
+      const chasm = Math.abs(Math.sin(v * Math.PI * 2 + u * 5)) < 0.08 ? 30 : 0;
+
+      let baseGrey = Math.floor(n * 75 + 115 - chasm);
+      let r = baseGrey;
+      let g = baseGrey - 4;
+      let b = baseGrey - 8;
+
+      if (isNorthPole > 0) {
+        const mordor = isNorthPole * (0.8 + noise.noise2D(u * 10, v * 10) * 0.2);
+        r = Math.floor(r * (1 - mordor) + 155 * mordor);
+        g = Math.floor(g * (1 - mordor) + 72 * mordor);
+        b = Math.floor(b * (1 - mordor) + 52 * mordor);
+      }
+
+      const idx = (y * width + x) * 4;
+      imgData.data[idx] = Math.min(255, Math.max(0, r));
+      imgData.data[idx + 1] = Math.min(255, Math.max(0, g));
+      imgData.data[idx + 2] = Math.min(255, Math.max(0, b));
+      imgData.data[idx + 3] = 255;
+    }
+  }
+
   ctx.putImageData(imgData, 0, 0);
   const texture = new THREE.CanvasTexture(canvas);
   texture.needsUpdate = true;
