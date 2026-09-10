@@ -1,0 +1,6 @@
+{
+  "name": "Solar System",
+  "description": "An interactive 3D Solar System simulation featuring the Sun, all 8 planets with procedural textures, orbits, rings, and moons.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
