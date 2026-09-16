@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -33,9 +34,9 @@ jobs:
         run: npm install @capacitor/core @capacitor/cli @capacitor/android
 
       - name: Initialize Capacitor
-        run: npx cap init "MyApp" "com.example.myapp" --web-dir=dist
+        run: npx cap init "SPECGIT" "com.specgit.app" --web-dir=dist
 
-      - name: Remove existing android platform (if any)
+      - name: Remove existing android platform
         run: rm -rf android
 
       - name: Add Android platform
@@ -62,5 +63,5 @@ jobs:
       - name: Upload APK as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
+          name: SPECGIT-debug
           path: android/app/build/outputs/apk/debug/app-debug.apk
