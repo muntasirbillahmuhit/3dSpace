@@ -25,6 +25,7 @@ export default function App() {
   const [showKuiperBelt, setShowKuiperBelt] = useState(true);
   const [showComet, setShowComet] = useState(true);
   const [showLabels, setShowLabels] = useState(true);
+  const [reduceSunGlare, setReduceSunGlare] = useState(false);
   const [simSpeed, setSimSpeed] = useState(1);
   const [rotationSpeed, setRotationSpeed] = useState(2);
 
@@ -63,6 +64,7 @@ export default function App() {
               showKuiperBelt={showKuiperBelt}
               showComet={showComet}
               showLabels={showLabels}
+              reduceSunGlare={reduceSunGlare}
               simSpeed={simSpeed} 
               rotationSpeed={rotationSpeed}
               selectedBodyId={selectedBodyId}
@@ -100,7 +102,7 @@ export default function App() {
             borderRadius: isMenuOpen ? 16 : 9999,
           }}
           transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
-          className="bg-emerald-950/40 backdrop-blur-xl border border-emerald-400/30 shadow-[0_8px_32px_0_rgba(16,185,129,0.25)] overflow-hidden flex flex-col"
+          className="bg-neutral-900/60 backdrop-blur-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col"
         >
           <AnimatePresence mode="wait">
             {!isMenuOpen ? (
@@ -112,10 +114,10 @@ export default function App() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
                 onClick={() => setIsMenuOpen(true)}
-                className="w-11 h-11 min-h-[44px] flex items-center justify-center text-emerald-200/90 hover:text-white hover:bg-emerald-900/30 active:bg-emerald-800/40 transition-colors focus:outline-none cursor-pointer"
+                className="w-11 h-11 min-h-[44px] flex items-center justify-center text-neutral-300 hover:text-white hover:bg-white/5 active:bg-white/10 transition-colors focus:outline-none cursor-pointer"
                 aria-label="Options"
               >
-                <MoreVertical className="w-5 h-5 drop-shadow-[0_2px_4px_rgba(16,185,129,0.5)]" />
+                <MoreVertical className="w-5 h-5" />
               </motion.button>
             ) : (
               <motion.div
@@ -126,12 +128,12 @@ export default function App() {
                 transition={{ duration: 0.2, delay: 0.1 }}
                 className="flex flex-col w-full h-full p-2"
               >
-                <div className="flex justify-between items-center px-2 py-1.5 mb-1 border-b border-emerald-400/20">
-                  <span className="text-emerald-100 text-sm font-medium tracking-wide">Options</span>
+                <div className="flex justify-between items-center px-2 py-1.5 mb-1 border-b border-white/10">
+                  <span className="text-neutral-400 text-xs font-medium uppercase tracking-widest">Options</span>
                   <button 
                     id="menu-close-button"
                     onClick={() => setIsMenuOpen(false)}
-                    className="p-1 -mr-1 rounded-full hover:bg-emerald-800/50 text-emerald-300 hover:text-white transition-colors cursor-pointer"
+                    className="p-1 -mr-1 rounded-full hover:bg-white/10 text-neutral-400 hover:text-white transition-colors cursor-pointer"
                     aria-label="Close menu"
                   >
                     <X className="w-4 h-4" />
@@ -141,39 +143,39 @@ export default function App() {
                   <button 
                     id="switch-mode-button"
                     onClick={() => { setCurrentMode('zero'); setIsMenuOpen(false); }}
-                    className="flex items-center gap-3 px-2 py-2 mt-1 text-sm text-emerald-200 hover:text-white hover:bg-emerald-800/40 rounded-lg transition-colors text-left cursor-pointer"
+                    className="flex items-center gap-3 px-2 py-2 mt-1 text-sm text-neutral-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors text-left cursor-pointer"
                   >
-                    <Rocket className="w-4 h-4" /> Zero Space
+                    <Rocket className="w-4 h-4 text-neutral-400" /> Zero Space
                   </button>
                 ) : (
                   <button 
                     id="switch-mode-button"
                     onClick={() => { setCurrentMode('solar'); setIsMenuOpen(false); }}
-                    className="flex items-center gap-3 px-2 py-2 mt-1 text-sm text-emerald-200 hover:text-white hover:bg-emerald-800/40 rounded-lg transition-colors text-left cursor-pointer"
+                    className="flex items-center gap-3 px-2 py-2 mt-1 text-sm text-neutral-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors text-left cursor-pointer"
                   >
-                    <Globe className="w-4 h-4" /> Solar System
+                    <Globe className="w-4 h-4 text-neutral-400" /> Solar System
                   </button>
                 )}
                 <button 
                   id="menu-settings-button"
                   onClick={() => { setIsSettingsOpen(true); setIsMenuOpen(false); }}
-                  className="flex items-center gap-3 px-2 py-2 text-sm text-emerald-200 hover:text-white hover:bg-emerald-800/40 rounded-lg transition-colors text-left cursor-pointer"
+                  className="flex items-center gap-3 px-2 py-2 text-sm text-neutral-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors text-left cursor-pointer"
                 >
-                  <Settings className="w-4 h-4" /> Settings
+                  <Settings className="w-4 h-4 text-neutral-400" /> Settings
                 </button>
                 <button 
                   id="menu-reset-button"
                   onClick={handleResetView}
-                  className="flex items-center gap-3 px-2 py-2 text-sm text-emerald-200 hover:text-white hover:bg-emerald-800/40 rounded-lg transition-colors text-left cursor-pointer"
+                  className="flex items-center gap-3 px-2 py-2 text-sm text-neutral-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors text-left cursor-pointer"
                 >
-                  <RefreshCw className="w-4 h-4" /> Reset View
+                  <RefreshCw className="w-4 h-4 text-neutral-400" /> Reset View
                 </button>
                 <button 
                   id="menu-about-button"
                   onClick={() => { setIsAboutOpen(true); setIsMenuOpen(false); }}
-                  className="flex items-center gap-3 px-2 py-2 text-sm text-emerald-200 hover:text-white hover:bg-emerald-800/40 rounded-lg transition-colors text-left cursor-pointer"
+                  className="flex items-center gap-3 px-2 py-2 text-sm text-neutral-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors text-left cursor-pointer"
                 >
-                  <Info className="w-4 h-4" /> About
+                  <Info className="w-4 h-4 text-neutral-400" /> About
                 </button>
               </motion.div>
             )}
@@ -191,17 +193,17 @@ export default function App() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
               transition={{ duration: 0.2 }}
-              className="w-full max-w-sm bg-neutral-900/90 border border-emerald-500/30 rounded-2xl shadow-2xl p-5 text-emerald-100 backdrop-blur-xl"
+              className="w-full max-w-sm bg-[#0a0a0a]/90 border border-white/10 rounded-2xl shadow-2xl p-5 text-neutral-200 backdrop-blur-2xl"
             >
-              <div className="flex justify-between items-center pb-3 mb-4 border-b border-emerald-500/20">
+              <div className="flex justify-between items-center pb-3 mb-4 border-b border-white/10">
                 <div className="flex items-center gap-2">
-                  <Sliders className="w-5 h-5 text-emerald-400" />
+                  <Sliders className="w-5 h-5 text-neutral-400" />
                   <h3 className="font-semibold text-base text-white">Simulation Settings</h3>
                 </div>
                 <button
                   id="close-settings-button"
                   onClick={() => setIsSettingsOpen(false)}
-                  className="p-1 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors cursor-pointer"
+                  className="p-1 rounded-lg text-neutral-500 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -210,17 +212,17 @@ export default function App() {
               <div className="space-y-4">
                 {/* Orbit Lines Toggle */}
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-neutral-200">Orbit Lines</span>
+                  <span className="text-sm font-medium text-neutral-300">Orbit Lines</span>
                   <button
                     id="toggle-orbits-button"
                     onClick={() => setShowOrbits(!showOrbits)}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer ${
-                      showOrbits ? 'bg-emerald-500' : 'bg-neutral-700'
+                      showOrbits ? 'bg-white' : 'bg-neutral-800'
                     }`}
                   >
                     <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        showOrbits ? 'translate-x-6' : 'translate-x-1'
+                      className={`inline-block h-4 w-4 transform rounded-full transition-transform ${
+                        showOrbits ? 'translate-x-6 bg-black' : 'translate-x-1 bg-neutral-400'
                       }`}
                     />
                   </button>
@@ -228,17 +230,17 @@ export default function App() {
 
                 {/* Asteroid Belt Toggle */}
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-neutral-200">Asteroid Belt</span>
+                  <span className="text-sm font-medium text-neutral-300">Asteroid Belt</span>
                   <button
                     id="toggle-asteroids-button"
                     onClick={() => setShowAsteroids(!showAsteroids)}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer ${
-                      showAsteroids ? 'bg-emerald-500' : 'bg-neutral-700'
+                      showAsteroids ? 'bg-white' : 'bg-neutral-800'
                     }`}
                   >
                     <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        showAsteroids ? 'translate-x-6' : 'translate-x-1'
+                      className={`inline-block h-4 w-4 transform rounded-full transition-transform ${
+                        showAsteroids ? 'translate-x-6 bg-black' : 'translate-x-1 bg-neutral-400'
                       }`}
                     />
                   </button>
@@ -246,17 +248,17 @@ export default function App() {
 
                 {/* Kuiper Belt Toggle */}
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-neutral-200">Kuiper Belt</span>
+                  <span className="text-sm font-medium text-neutral-300">Kuiper Belt</span>
                   <button
                     id="toggle-kuiper-button"
                     onClick={() => setShowKuiperBelt(!showKuiperBelt)}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer ${
-                      showKuiperBelt ? 'bg-emerald-500' : 'bg-neutral-700'
+                      showKuiperBelt ? 'bg-white' : 'bg-neutral-800'
                     }`}
                   >
                     <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        showKuiperBelt ? 'translate-x-6' : 'translate-x-1'
+                      className={`inline-block h-4 w-4 transform rounded-full transition-transform ${
+                        showKuiperBelt ? 'translate-x-6 bg-black' : 'translate-x-1 bg-neutral-400'
                       }`}
                     />
                   </button>
@@ -264,17 +266,17 @@ export default function App() {
 
                 {/* Halley's Comet Toggle */}
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-neutral-200">Halley&apos;s Comet (1P)</span>
+                  <span className="text-sm font-medium text-neutral-300">Halley&apos;s Comet (1P)</span>
                   <button
                     id="toggle-comet-button"
                     onClick={() => setShowComet(!showComet)}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer ${
-                      showComet ? 'bg-emerald-500' : 'bg-neutral-700'
+                      showComet ? 'bg-white' : 'bg-neutral-800'
                     }`}
                   >
                     <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        showComet ? 'translate-x-6' : 'translate-x-1'
+                      className={`inline-block h-4 w-4 transform rounded-full transition-transform ${
+                        showComet ? 'translate-x-6 bg-black' : 'translate-x-1 bg-neutral-400'
                       }`}
                     />
                   </button>
@@ -282,17 +284,35 @@ export default function App() {
 
                 {/* 3D Planet Labels Toggle */}
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-neutral-200">3D Body Labels</span>
+                  <span className="text-sm font-medium text-neutral-300">3D Body Labels</span>
                   <button
                     id="toggle-labels-button"
                     onClick={() => setShowLabels(!showLabels)}
                     className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer ${
-                      showLabels ? 'bg-emerald-500' : 'bg-neutral-700'
+                      showLabels ? 'bg-white' : 'bg-neutral-800'
                     }`}
                   >
                     <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        showLabels ? 'translate-x-6' : 'translate-x-1'
+                      className={`inline-block h-4 w-4 transform rounded-full transition-transform ${
+                        showLabels ? 'translate-x-6 bg-black' : 'translate-x-1 bg-neutral-400'
+                      }`}
+                    />
+                  </button>
+                </div>
+
+                {/* Reduce Sun Glare Toggle */}
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium text-neutral-300">Reduce Sun Glare</span>
+                  <button
+                    id="toggle-sun-glare-button"
+                    onClick={() => setReduceSunGlare(!reduceSunGlare)}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer ${
+                      reduceSunGlare ? 'bg-white' : 'bg-neutral-800'
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full transition-transform ${
+                        reduceSunGlare ? 'translate-x-6 bg-black' : 'translate-x-1 bg-neutral-400'
                       }`}
                     />
                   </button>
@@ -301,8 +321,8 @@ export default function App() {
                 {/* Simulation Speed */}
                 <div>
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-medium text-neutral-200">Orbital Speed</span>
-                    <span className="text-xs font-mono text-emerald-400">{simSpeed}x</span>
+                    <span className="text-sm font-medium text-neutral-300">Orbital Speed</span>
+                    <span className="text-xs font-mono text-neutral-400">{simSpeed}x</span>
                   </div>
                   <div className="grid grid-cols-4 gap-2">
                     {[0.5, 1, 2, 4].map((speed) => (
@@ -312,8 +332,8 @@ export default function App() {
                         onClick={() => setSimSpeed(speed)}
                         className={`py-1.5 text-xs font-medium rounded-lg transition-all cursor-pointer ${
                           simSpeed === speed
-                            ? 'bg-emerald-500 text-black font-semibold shadow-sm'
-                            : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'
+                            ? 'bg-white text-black shadow-sm'
+                            : 'bg-white/5 text-neutral-400 hover:bg-white/10'
                         }`}
                       >
                         {speed}x
@@ -325,8 +345,8 @@ export default function App() {
                 {/* Axial Rotation Speed */}
                 <div>
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-medium text-neutral-200">Rotation Speed</span>
-                    <span className="text-xs font-mono text-emerald-400">{rotationSpeed}x</span>
+                    <span className="text-sm font-medium text-neutral-300">Rotation Speed</span>
+                    <span className="text-xs font-mono text-neutral-400">{rotationSpeed}x</span>
                   </div>
                   <div className="grid grid-cols-4 gap-2">
                     {[1, 2, 3, 5].map((speed) => (
@@ -336,8 +356,8 @@ export default function App() {
                         onClick={() => setRotationSpeed(speed)}
                         className={`py-1.5 text-xs font-medium rounded-lg transition-all cursor-pointer ${
                           rotationSpeed === speed
-                            ? 'bg-emerald-500 text-black font-semibold shadow-sm'
-                            : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'
+                            ? 'bg-white text-black shadow-sm'
+                            : 'bg-white/5 text-neutral-400 hover:bg-white/10'
                         }`}
                       >
                         {speed}x
@@ -347,11 +367,11 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="mt-6 pt-3 border-t border-emerald-500/20 flex justify-end">
+              <div className="mt-6 pt-4 border-t border-white/10 flex justify-end">
                 <button
                   id="done-settings-button"
                   onClick={() => setIsSettingsOpen(false)}
-                  className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-semibold rounded-lg transition-colors cursor-pointer"
+                  className="px-5 py-2 bg-white hover:bg-neutral-200 text-black text-xs font-medium rounded-lg transition-colors cursor-pointer"
                 >
                   Done
                 </button>
@@ -371,43 +391,46 @@ export default function App() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
               transition={{ duration: 0.2 }}
-              className="w-full max-w-md bg-neutral-900/90 border border-emerald-500/30 rounded-2xl shadow-2xl p-6 text-neutral-200 backdrop-blur-xl"
+              className="w-full max-w-md bg-[#0a0a0a]/90 border border-white/10 rounded-2xl shadow-2xl p-6 text-neutral-200 backdrop-blur-2xl"
             >
-              <div className="flex justify-between items-center pb-3 mb-4 border-b border-emerald-500/20">
+              <div className="flex justify-between items-center pb-3 mb-4 border-b border-white/10">
                 <div className="flex items-center gap-2">
-                  <Globe className="w-5 h-5 text-emerald-400" />
+                  <Globe className="w-5 h-5 text-neutral-400" />
                   <h3 className="font-semibold text-base text-white">Solar System & Zero Space</h3>
                 </div>
                 <button
                   id="close-about-button"
                   onClick={() => setIsAboutOpen(false)}
-                  className="p-1 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors cursor-pointer"
+                  className="p-1 rounded-lg text-neutral-500 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
-              <div className="space-y-4 text-xs leading-relaxed text-neutral-300">
+              <div className="space-y-4 text-sm leading-relaxed text-neutral-400">
                 <p>
                   An interactive 3D Solar System simulation featuring the Sun, all 8 major planets, and dwarf planet Pluto with its moon Charon, procedural surface textures, orbits, planetary rings, and asteroid belt, complemented by a Zero Space sandbox.
                 </p>
 
-                <div className="p-3 bg-neutral-950/60 rounded-xl border border-neutral-800 space-y-2">
-                  <div className="font-semibold text-emerald-300 text-xs uppercase tracking-wider">Navigation Controls</div>
-                  <ul className="space-y-1 text-neutral-400">
-                    <li>• <span className="text-neutral-200 font-medium">Orbit / Rotate:</span> Left click and drag</li>
-                    <li>• <span className="text-neutral-200 font-medium">Pan:</span> Right click and drag</li>
-                    <li>• <span className="text-neutral-200 font-medium">Zoom:</span> Scroll mouse wheel</li>
-                    <li>• <span className="text-neutral-200 font-medium">Zero Space Glide:</span> Click anywhere on the ground plane</li>
+                <div className="p-4 bg-white/5 rounded-xl border border-white/5 space-y-3 mt-4">
+                  <div className="font-medium text-neutral-300 text-xs uppercase tracking-widest">Navigation Controls</div>
+                  <ul className="space-y-2 text-neutral-400">
+                    <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-neutral-600" /> <span className="text-neutral-200">Orbit / Rotate:</span> Left click and drag</li>
+                    <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-neutral-600" /> <span className="text-neutral-200">Pan:</span> Right click and drag</li>
+                    <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-neutral-600" /> <span className="text-neutral-200">Zoom:</span> Scroll mouse wheel</li>
+                    <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-neutral-600" /> <span className="text-neutral-200">Zero Space Glide:</span> Click anywhere on the ground plane</li>
                   </ul>
                 </div>
               </div>
 
-              <div className="mt-6 pt-3 border-t border-emerald-500/20 flex justify-end">
+              <div className="mt-6 pt-4 border-t border-white/10 flex justify-between items-center">
+                <div className="text-xs text-neutral-500 font-medium">
+                  Developed by muhit
+                </div>
                 <button
                   id="dismiss-about-button"
                   onClick={() => setIsAboutOpen(false)}
-                  className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-semibold rounded-lg transition-colors cursor-pointer"
+                  className="px-5 py-2 bg-white hover:bg-neutral-200 text-black text-xs font-medium rounded-lg transition-colors cursor-pointer"
                 >
                   Close
                 </button>

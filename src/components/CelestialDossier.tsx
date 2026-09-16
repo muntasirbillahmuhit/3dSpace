@@ -53,7 +53,7 @@ export const CelestialDossier: React.FC<CelestialDossierProps> = ({
         animate={{ opacity: 1, x: 0, scale: 1 }}
         exit={{ opacity: 0, x: -30, scale: 0.96 }}
         transition={{ duration: 0.25, ease: 'easeOut' }}
-        className="fixed top-5 left-5 z-30 w-[340px] sm:w-[380px] max-h-[calc(100vh-40px)] flex flex-col bg-neutral-950/85 backdrop-blur-2xl border border-emerald-500/25 rounded-2xl shadow-[0_16px_48px_rgba(0,0,0,0.85)] text-neutral-200 overflow-hidden"
+        className="fixed top-5 left-5 z-30 w-[340px] sm:w-[380px] max-h-[calc(100vh-40px)] flex flex-col bg-[#0a0a0a]/90 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_16px_48px_rgba(0,0,0,0.85)] text-neutral-200 overflow-hidden"
       >
         {/* Header Ribbon */}
         <div className="relative p-5 pb-4 border-b border-neutral-800/80 bg-gradient-to-b from-neutral-900/60 to-transparent">
@@ -70,7 +70,7 @@ export const CelestialDossier: React.FC<CelestialDossierProps> = ({
                   className="w-2.5 h-2.5 rounded-full ring-2 ring-white/20" 
                   style={{ backgroundColor: currentBody.color }}
                 />
-                <span className="text-[11px] font-mono uppercase tracking-widest text-emerald-400 font-semibold">
+                <span className="text-[11px] font-mono uppercase tracking-widest text-neutral-400 font-medium">
                   {info.type}
                 </span>
               </div>
@@ -122,7 +122,7 @@ export const CelestialDossier: React.FC<CelestialDossierProps> = ({
           <div className="grid grid-cols-2 gap-2.5">
             <div className="p-2.5 rounded-xl bg-neutral-900/60 border border-neutral-800/80">
               <div className="flex items-center gap-1.5 text-neutral-400 mb-1">
-                <Compass className="w-3.5 h-3.5 text-emerald-400" />
+                <Compass className="w-3.5 h-3.5 text-neutral-400" />
                 <span className="text-[10px] uppercase font-mono tracking-wider">Diameter</span>
               </div>
               <div className="text-xs font-semibold text-white">
@@ -184,7 +184,7 @@ export const CelestialDossier: React.FC<CelestialDossierProps> = ({
           {/* Atmosphere Info */}
           <div className="p-3 rounded-xl bg-neutral-900/60 border border-neutral-800/80 space-y-1.5">
             <div className="flex items-center gap-1.5 text-neutral-400">
-              <Wind className="w-3.5 h-3.5 text-emerald-400" />
+              <Wind className="w-3.5 h-3.5 text-neutral-400" />
               <span className="text-[10px] uppercase font-mono tracking-wider font-semibold text-neutral-300">
                 Atmosphere & Envelope
               </span>
@@ -196,7 +196,7 @@ export const CelestialDossier: React.FC<CelestialDossierProps> = ({
 
           {/* Notable Surface & Planetary Landmarks */}
           <div className="space-y-2">
-            <div className="flex items-center gap-1.5 text-[11px] uppercase font-mono tracking-wider text-emerald-300 font-semibold">
+            <div className="flex items-center gap-1.5 text-[11px] uppercase font-mono tracking-wider text-neutral-400 font-medium">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Notable Landmarks & Phenomena</span>
             </div>
@@ -206,7 +206,7 @@ export const CelestialDossier: React.FC<CelestialDossierProps> = ({
                   key={idx} 
                   className="flex items-start gap-2 text-xs text-neutral-300 bg-neutral-900/40 px-2.5 py-1.5 rounded-lg border border-neutral-800/40"
                 >
-                  <span className="text-emerald-400 font-bold mt-0.5">•</span>
+                  <span className="text-white font-bold mt-0.5">•</span>
                   <span>{feat}</span>
                 </li>
               ))}
@@ -220,7 +220,7 @@ export const CelestialDossier: React.FC<CelestialDossierProps> = ({
                 <span className="text-[10px] uppercase font-mono tracking-wider font-semibold text-neutral-300">
                   Visible Satellite Moons
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono">
+                <span className="px-2 py-0.5 rounded-full bg-white/10 text-neutral-300 text-[10px] font-mono">
                   {(currentBody as PlanetData).moons!.length} tracked
                 </span>
               </div>
@@ -246,8 +246,8 @@ export const CelestialDossier: React.FC<CelestialDossierProps> = ({
         <div className="p-3 bg-neutral-900/80 border-t border-neutral-800 flex items-center justify-between">
           <span className="text-[11px] text-neutral-400 font-mono flex items-center gap-1.5">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neutral-300 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
             </span>
             Locked Camera Orbit
           </span>

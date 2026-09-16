@@ -116,6 +116,7 @@ export interface SpaceCanvasProps {
   showKuiperBelt?: boolean;
   showComet?: boolean;
   showLabels?: boolean;
+  reduceSunGlare?: boolean;
   simSpeed?: number;
   rotationSpeed?: number;
   selectedBodyId?: string | null;
@@ -128,6 +129,7 @@ export const SpaceCanvas: React.FC<SpaceCanvasProps> = ({
   showKuiperBelt = true,
   showComet = true,
   showLabels = true,
+  reduceSunGlare = false,
   simSpeed = 1,
   rotationSpeed = 2,
   selectedBodyId = null,
@@ -139,6 +141,7 @@ export const SpaceCanvas: React.FC<SpaceCanvasProps> = ({
   const showKuiperBeltRef = useRef(showKuiperBelt);
   const showCometRef = useRef(showComet);
   const showLabelsRef = useRef(showLabels);
+  const reduceSunGlareRef = useRef(reduceSunGlare);
   const simSpeedRef = useRef(simSpeed);
   const rotationSpeedRef = useRef(rotationSpeed);
   const selectedBodyIdRef = useRef(selectedBodyId);
@@ -149,6 +152,9 @@ export const SpaceCanvas: React.FC<SpaceCanvasProps> = ({
   const kuiperMeshRef = useRef<THREE.InstancedMesh | null>(null);
   const cometGroupRef = useRef<THREE.Group | null>(null);
   const labelsListRef = useRef<THREE.Sprite[]>([]);
+  const sunPointLightRef = useRef<THREE.PointLight | null>(null);
+  const sunCoreLightRef = useRef<THREE.PointLight | null>(null);
+  const sunHaloMatRef = useRef<THREE.MeshBasicMaterial | null>(null);
 
   useEffect(() => {
     selectedBodyIdRef.current = selectedBodyId;
@@ -192,6 +198,19 @@ export const SpaceCanvas: React.FC<SpaceCanvasProps> = ({
       s.visible = showLabels;
     });
   }, [showLabels]);
+
+  useEffect(() => {
+    reduceSunGlareRef.current = reduceSunGlare;
+    if (sunPointLightRef.current) {
+      sunPointLightRef.current.intensity = reduceSunGlare ? 2.8 : 7.8;
+    }
+    if (sunCoreLightRef.current) {
+      sunCoreLightRef.current.intensity = reduceSunGlare ? 1.5 : 4.2;
+    }
+    if (sunHaloMatRef.current) {
+      sunHaloMatRef.current.opacity = reduceSunGlare ? 0.05 : 0.15;
+    }
+  }, [reduceSunGlare]);
 
   useEffect(() => {
     simSpeedRef.current = simSpeed;
@@ -243,14 +262,16 @@ export const SpaceCanvas: React.FC<SpaceCanvasProps> = ({
     scene.add(ambientLight);
 
     // Primary Solar Point Light: intensely bright direct sunlight reaching out past Pluto
-    const sunPointLight = new THREE.PointLight(0xfffbf2, 7.8, 3800, 0.2);
+    const sunPointLight = new THREE.PointLight(0xfffbf2, reduceSunGlareRef.current ? 2.8 : 7.8, 3800, 0.2);
     sunPointLight.position.set(0, 0, 0);
     scene.add(sunPointLight);
+    sunPointLightRef.current = sunPointLight;
 
     // Secondary core radiant point light for dazzling inner solar illumination
-    const sunCoreLight = new THREE.PointLight(0xffe2b8, 4.2, 950, 0.35);
+    const sunCoreLight = new THREE.PointLight(0xffe2b8, reduceSunGlareRef.current ? 1.5 : 4.2, 950, 0.35);
     sunCoreLight.position.set(0, 0, 0);
     scene.add(sunCoreLight);
+    sunCoreLightRef.current = sunCoreLight;
 
     // Generate Planetary Textures
     const starTex = createStarTexture();
@@ -290,12 +311,13 @@ export const SpaceCanvas: React.FC<SpaceCanvasProps> = ({
     const sunHaloMat = new THREE.MeshBasicMaterial({
       color: 0xf59e0b,
       transparent: true,
-      opacity: 0.15,
+      opacity: reduceSunGlareRef.current ? 0.05 : 0.15,
       blending: THREE.AdditiveBlending,
       side: THREE.BackSide,
     });
     const sunHaloMesh = new THREE.Mesh(sunHaloGeom, sunHaloMat);
     sunGroup.add(sunHaloMesh);
+    sunHaloMatRef.current = sunHaloMat;
 
     // Sun Name Label Sprite
     const sunLabel = createPlanetLabelSprite('Sun', '#f59e0b', 'sun');
@@ -1051,6 +1073,9 @@ export const SpaceCanvas: React.FC<SpaceCanvasProps> = ({
       kuiperMeshRef.current = null;
       cometGroupRef.current = null;
       labelsListRef.current = [];
+      sunPointLightRef.current = null;
+      sunCoreLightRef.current = null;
+      sunHaloMatRef.current = null;
       controls.dispose();
       renderer.dispose();
 
